@@ -19,5 +19,5 @@ loop {
     i += 1
 }
 
-lyrics = songs.map { |song| song.lines.map { |line| if line.lyric[0] != "[" and line.lyric[0] != "\n" then line.lyric end } }
+lyrics = songs.map { |song| song.lines.map { |line| if line.lyric[0] != "[" and line.lyric[0] != "\n" then line.lyric end }.join(" ") }
 puts lyrics

@@ -14,7 +14,7 @@ def get_lyrics(artist_name):
 
 def make_ngrams(lyrics):
     ngrams = []
-    for i in range(2, ngram_length + 1):
+    for i in range(1, ngram_length + 1):
         unique_igrams = set()
         for lyric in lyrics:
             igrams = [lyric[x:x+i] for x in range(len(lyric))]
