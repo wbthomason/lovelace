@@ -11,7 +11,7 @@ artist = song_results[0].artist
 songs = artist.songs
 
 i = 2
-next_songs =[]
+next_songs = []
 loop {
     next_songs = artist.songs(page: i)
     break if next_songs == []
@@ -19,5 +19,5 @@ loop {
     i += 1
 }
 
-lyrics = songs.map { |song| song.lines.map { |line| if line.lyric[0] != "[" and line.lyric[0] != "\n" then line.lyric end }.join(" ") }
+lyrics = songs.map { |song| song.lines.map { |line| line.lyric }.join(" ") }
 puts lyrics
