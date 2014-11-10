@@ -3,9 +3,13 @@ import sys
 import re
 import random
 import os
+import nltk.data
+import subprocess
 
 ngram_length = 2
 tag_regex = re.compile("\[[^\n]*?\]|[^\n]*?\]|\[[^\n]*?")
+nl_regex = re.compile("\n")
+period_regex = re.compile("\.")
 
 def get_lyrics(artist_name):
     artist_nameq = '"' + artist_name + '"'
@@ -18,6 +22,7 @@ def get_lyrics(artist_name):
         print("Error retrieving lyrics: " + rapgenius_result.stderr.decode("utf-8"))
         sys.exit(-1)
     lyrics = tag_regex.sub("", rapgenius_result.stdout.decode("utf-8"))
+    lyrics = nl_regex.sub(".\n", lyrics).lower()
     with open(artist_name, 'w') as artist_file:
         artist_file.write(lyrics)
     words = lyrics.split()
@@ -66,13 +71,19 @@ def make_song(artist_name):
     verse_length = random.randint(50,150)
     verses = []
     verse_generator = generate_lyrics(lyric_ngrams, verse_length)
+    verse_splitter = nltk.data.load('tokenizers/punkt/english.pickle')
     for i in range(num_verses):
-        verses.append(next(verse_generator))
+        verse = next(verse_generator)
+        verse = verse_splitter.tokenize(" ".join(verse))
+        verse = list(map(lambda x: period_regex.sub("", x), verse))
+        verses.append(verse)
     chorus = next(generate_lyrics(lyric_ngrams, random.randint(20,50)))
     title_start = random.randint(0, len(chorus)-1)
-    title_len = random.randint(1, 3)
+    title_len = random.randint(1, 2)
     title = " ".join(chorus[title_start:title_start + title_len] if title_start + title_len < len(chorus) else chorus[title_start:])
-    return [title, " ".join(chorus), verses]
+    chorus = verse_splitter.tokenize(" ".join(chorus))
+    chorus = list(map(lambda x: period_regex.sub("", x), chorus))
+    return [title, chorus, verses]
 
 if __name__=="__main__":
     if len(sys.argv) < 2:
@@ -80,7 +91,15 @@ if __name__=="__main__":
     else:
        artist = " ".join(sys.argv[1:])
        song = make_song(artist)
-       print('"{}", by {}'.format(song[0], artist))
-       print("[Chorus]\n{}".format(song[1]))
+       song_string ='"{}", by {}\n\n'.format(song[0], artist)
+       song_string += "[Chorus]\n\n"
+       for line in song[1]:
+           song_string += "{}\n".format(line)
+       song_string += "\n"
        for i in range(1, len(song[2]) + 1):
-           print("[Verse {}]\n{}".format(i, " ".join(song[2][i-1])))
+           song_string += "[Verse {}]\n".format(i)
+           for line in song[2][i-1]:
+                song_string += "{}\n".format(line)
+           song_string += "\n"
+       print(song_string)
+       subprocess.call(["espeak", "-ven-us", "-p80", "-l4", "-k20", song_string])
