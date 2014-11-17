@@ -51,7 +51,9 @@ def check_rhythm(song):
 def generate_lyrics(corpus, length):
     random.seed()
     curr = random.choice(list(corpus.keys()))
+    print("curr={}".format(curr))
     def make_verse(seed):
+        print("seed={}".format(seed))
         while True:
             song = []
             for i in range(length):
