@@ -51,7 +51,9 @@ def check_rhythm(song):
 def generate_lyrics(corpus, length):
     random.seed()
     curr = random.choice(list(corpus.keys()))
+    print("curr={}".format(curr))
     def make_verse(seed):
+        print("seed={}".format(seed))
         while True:
             song = []
             for i in range(length):
@@ -102,4 +104,4 @@ if __name__=="__main__":
                 song_string += "{}\n".format(line)
            song_string += "\n"
        print(song_string)
-       subprocess.call(["espeak", "-ven-us", "-p80", "-l4", "-k20", song_string])
+       #subprocess.call(["espeak", "-ven-us", "-p80", "-l4", "-k20", song_string])

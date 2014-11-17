@@ -6,3 +6,4 @@ gem install rapgenius
 sudo pip install Naked 
 sudo pip install nltk
 sudo pip install pyttsx
+sudo pip install youtube-dl
