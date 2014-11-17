@@ -79,7 +79,7 @@ def make_song(artist_name):
         verses.append(verse)
     chorus = next(generate_lyrics(lyric_ngrams, random.randint(20,50)))
     title_start = random.randint(0, len(chorus)-1)
-    title_len = random.randint(1, 2)
+    title_len = random.randint(1, 4)
     title = " ".join(chorus[title_start:title_start + title_len] if title_start + title_len < len(chorus) else chorus[title_start:])
     chorus = verse_splitter.tokenize(" ".join(chorus))
     chorus = list(map(lambda x: period_regex.sub("", x), chorus))
@@ -92,7 +92,7 @@ if __name__=="__main__":
        artist = " ".join(sys.argv[1:])
        song = make_song(artist)
        song_string ='"{}", by {}\n\n'.format(song[0], artist)
-       song_string += "[Chorus]\n\n"
+       song_string += "[Chorus]\n"
        for line in song[1]:
            song_string += "{}\n".format(line)
        song_string += "\n"
@@ -102,4 +102,4 @@ if __name__=="__main__":
                 song_string += "{}\n".format(line)
            song_string += "\n"
        print(song_string)
-       subprocess.call(["espeak", "-ven-us", "-p80", "-l4", "-k20", song_string])
+       #subprocess.call(["espeak", "-ven-us", "-p80", "-l4", "-k20", song_string])
