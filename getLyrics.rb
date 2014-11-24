@@ -22,6 +22,6 @@ loop {
 lyrics = songs.map { |song| song.lines.map { |line| line.lyric }.join(" ") }
 songs.each{ |song| puts song.media.first }
 File.open(artist_name + "-media", "w") do |mediaurls|
-    songs.each { |song| if song.media.first.respond_to?("url") then mediaurls.puts song.media.first.url + " " + song.media.first.provider end }
+    songs.each { |song| if song.media.first.respond_to?("url") then mediaurls.puts song.media.first.url end }
 end
 puts lyrics
