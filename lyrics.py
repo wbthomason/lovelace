@@ -68,7 +68,7 @@ def make_song(artist_name):
     print("Got lyrics!")
     lyric_ngrams = make_ngrams(raw_words)
     print("Made ngrams!")
-    num_verses = random.randint(3, 6)   
+    num_verses = random.randint(3, 6)
     verse_length = random.randint(50,150)
     verses = []
     verse_generator = generate_lyrics(lyric_ngrams, verse_length)
